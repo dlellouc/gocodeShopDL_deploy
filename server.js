@@ -19,6 +19,7 @@ const app = express();
 app.use(express.json());
 // app.use(express.urlencoded({extended: false})) // test for empty body
 app.use(cors());
+app.use(express.static('client/build'));
 
 mongoose.set('strictQuery', true);
 
@@ -36,6 +37,10 @@ app.get('/api/products/getOneProduct/:id', getOneProductController);
 app.post('/api/products/addProduct', addProductController);
 app.put('/api/products/updateProduct/:id', updateProductController);
 app.delete('/api/products/deleteProduct/:id', deleteProductController);
+
+app.get('*', () => (req, res) => {
+    res.sendFile(__dirname + '/client/build/index.html');
+});
 
 
 // without mongodb atlas :
