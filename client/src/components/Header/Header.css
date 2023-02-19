@@ -1,0 +1,55 @@
+
+:root {
+    --header-primary-color: indigo;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}
+
+/* a, h1 {
+    color: var(--header-primary-color, indigo);
+    font-size: 1.3em;
+    font-weight: 500;
+} */
+
+.header-top {
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 70% 15% 15%;
+    grid-template-areas: 
+        'links cart clock';
+}
+
+.header-links-div {
+    grid-area: links;
+}
+
+.header-links-div > a {
+    padding-right: 20px;
+    text-decoration: none;
+
+    color: var(--header-primary-color, indigo);
+    font-size: 1.3em;
+    font-weight: 500;
+}
+
+.header-cart-div {
+    grid-area: cart;
+}
+
+.header-clock-div {
+    grid-area: clock;
+}
+
+.header-clock-div > h1 {
+    color: var(--header-primary-color, indigo);
+    font-size: 1.3em;
+    font-weight: 500;
+}
+
+.header-bottom {
+    grid-area: cookies;
+}

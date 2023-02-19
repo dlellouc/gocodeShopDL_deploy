@@ -1,0 +1,19 @@
+
+.product-view {
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 30% 70%;
+    grid-template-areas: 'pvimg pvinfo';
+}
+
+.product-view-image-div {
+    grid-area: pvimg;
+}
+
+.product-view-image-div > img {
+    width: 100%;
+}
+
+.product-view-info {
+    grid-area: pvinfo;
+}
