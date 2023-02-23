@@ -1,6 +1,7 @@
 
 import { addUser, getAllUsers, getOneUser, deleteUser } from "../services/Users.js";
 import { usersAllowedUpdates } from '../data/data.js'
+import bcrypt from 'bcrypt';
 
 export const getAllUsersController = async (req, res) => {
     try {
@@ -35,9 +36,17 @@ export const getOneUserController = async (req, res) => {
 export const addUserController = async (req, res) => {
     try {
         const { firstName, lastName, email, password } = req.body;
-        const newUser = await addUser(firstName, lastName, email, password);
-
-        res.status(200).send(newUser);
+        const existingUser = getOneUser({email: email});
+        
+        if (existingUser) {
+            res.status(400).send({message: "email already in use"});
+        
+        } else {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            const newUser = await addUser(firstName, lastName, email, hashedPassword);
+    
+            res.status(200).send(newUser);
+        }
 
     } catch(error) {
         console.log(req.body)
@@ -90,3 +99,27 @@ export const deleteUserController = async (req, res) => {
         res.status(500).send({message:error});
     }
 }
+
+
+
+export const logInUserController = async (req, res) => {
+    try {
+        res.json("login")
+
+    } catch(error) {
+        console.log(error);
+        res.status(500).send({message:{error}});
+    }
+
+};
+
+export const getUserProfileController = async (req, res) => {
+    try {
+        res.json("profile")
+
+    } catch(error) {
+        console.log(error);
+        res.status(500).send({message:{error}});
+    }
+
+};

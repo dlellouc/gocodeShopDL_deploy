@@ -1,13 +1,11 @@
 import express from 'express'
 import cors from 'cors'
 
-import { productsAllowedUpdates } from './data/data.js'
-
 import { mongoose } from 'mongoose'
 import { addProductController, deleteProductController, getAllProductsController, getOneProductController, updateProductController } from './controllers/Products.js'
 
 import * as dotenv from 'dotenv'
-import { addUserController, deleteUserController, getAllUsersController, getOneUserController, updateUserController } from './controllers/Users.js'
+import { addUserController, deleteUserController, getAllUsersController, getOneUserController, getUserProfileController, logInUserController, updateUserController } from './controllers/Users.js'
 
 
 dotenv.config();
@@ -44,6 +42,10 @@ app.get('/api/users/getOneUser/:id', getOneUserController);
 app.post('/api/users/addUser', addUserController);
 app.put('/api/users/updateUser/:id', updateUserController);
 app.delete('/api/users/deleteUser/:id', deleteUserController);
+
+app.post('/api/users/register', addUserController);       // same as addUser ?
+app.post('/api/user/login', logInUserController);
+app.get('api/users/profile/:id', getUserProfileController);     // same as getOneUser ?
 
 app.get('*', () => (req, res) => {
     res.sendFile(__dirname + '/client/build/index.html');

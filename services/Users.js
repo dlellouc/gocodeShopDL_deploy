@@ -9,8 +9,8 @@ export const getOneUser = (id) => {
     return Users.findOne({ _id: id })
 }
 
-export const addUser = (firstName, lastName, email, password) => {
-    const newUser = new Users({ firstName: firstName, lastName: lastName, email: email, password: password });
+export const addUser = (firstName, lastName, email, hashedPassword) => {
+    const newUser = new Users({ firstName: firstName, lastName: lastName, email: email, password: hashedPassword });
     return newUser.save();
 }
 
