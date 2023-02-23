@@ -7,6 +7,7 @@ import { mongoose } from 'mongoose'
 import { addProductController, deleteProductController, getAllProductsController, getOneProductController, updateProductController } from './controllers/Products.js'
 
 import * as dotenv from 'dotenv'
+import { addUserController, deleteUserController, getAllUsersController, getOneUserController, updateUserController } from './controllers/Users.js'
 
 
 dotenv.config();
@@ -38,30 +39,36 @@ app.post('/api/products/addProduct', addProductController);
 app.put('/api/products/updateProduct/:id', updateProductController);
 app.delete('/api/products/deleteProduct/:id', deleteProductController);
 
+app.get('/api/users/getAllUsers', getAllUsersController);
+app.get('/api/users/getOneUser/:id', getOneUserController);
+app.post('/api/users/addUser', addUserController);
+app.put('/api/users/updateUser/:id', updateUserController);
+app.delete('/api/users/deleteUser/:id', deleteUserController);
+
 app.get('*', () => (req, res) => {
     res.sendFile(__dirname + '/client/build/index.html');
 });
 
 
 // without mongodb atlas :
-// mongoose.connect('mongodb://127.0.0.1:27017/shop_db', {               // shop_db = db
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true
-// })
+mongoose.connect('mongodb://127.0.0.1:27017/shop_db', {               // shop_db = db
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
 
-// // listener at the bottom which concludes the listening function to fulfill all of the requests
-// app.listen(PORT, () => {
-//     console.log('server listening at port *')
-// });
+// listener at the bottom which concludes the listening function to fulfill all of the requests
+app.listen(PORT, () => {
+    console.log('server listening at port *')
+});
 
 
 // with mongodb atlas :
-mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}?retryWrites=true&w=majority`, {               
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}, (info) => {
-    console.log('info ?', info);
-    app.listen(PORT, () => {
-        console.log('server listening at port *')
-    })
-})
+// mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}?retryWrites=true&w=majority`, {               
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true
+// }, (info) => {
+//     console.log('info ?', info);
+//     app.listen(PORT, () => {
+//         console.log('server listening at port *')
+//     })
+// })
