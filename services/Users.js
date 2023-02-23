@@ -5,8 +5,12 @@ export const getAllUsers = () => {
     return Users.find({});
 }
 
-export const getOneUser = (id) => {
+export const getOneUserById = (id) => {
     return Users.findOne({ _id: id })
+}
+
+export const getOneUserByEmail = (email) => {
+    return Users.findOne({ email: email })
 }
 
 export const addUser = (firstName, lastName, email, hashedPassword) => {

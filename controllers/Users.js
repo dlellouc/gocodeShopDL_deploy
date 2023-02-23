@@ -1,7 +1,15 @@
 
-import { addUser, getAllUsers, getOneUser, deleteUser } from "../services/Users.js";
+import { addUser, getAllUsers, getOneUserById, getOneUserByEmail, deleteUser } from "../services/Users.js";
 import { usersAllowedUpdates } from '../data/data.js'
 import bcrypt from 'bcrypt';
+// const { sign, verify } = require('jsonwebtoken');
+import jwtPkg from 'jsonwebtoken';
+const { sign, verify } = jwtPkg;
+import express from 'express'
+
+import * as dotenv from 'dotenv'
+dotenv.config();
+const { JWT_SECRET } = process.env;
 
 export const getAllUsersController = async (req, res) => {
     try {
@@ -19,7 +27,7 @@ export const getAllUsersController = async (req, res) => {
 export const getOneUserController = async (req, res) => {
     try {
         const { id } = req.params;
-        const user = await getOneUser(id);
+        const user = await getOneUserById(id);
 
         if (!user) {
             res.status(404).send({ message: 'user does not exist' });
@@ -36,7 +44,7 @@ export const getOneUserController = async (req, res) => {
 export const addUserController = async (req, res) => {
     try {
         const { firstName, lastName, email, password } = req.body;
-        const existingUser = getOneUser({email: email});
+        const existingUser = getOneUserByEmail(email);
         
         if (existingUser) {
             res.status(400).send({message: "email already in use"});
@@ -65,7 +73,7 @@ export const updateUserController = async (req, res) => {
     } else {
         try {
             const { id } = req.params;
-            const user = await getOneUser(id);
+            const user = await getOneUserById(id);
     
             if (!user) {
                 res.status(404).send({ message: 'user does not exist' });
@@ -104,7 +112,31 @@ export const deleteUserController = async (req, res) => {
 
 export const logInUserController = async (req, res) => {
     try {
-        res.json("login")
+        const { email, password } = req.body;
+        const user = await getOneUserByEmail(email);
+
+
+        if (!user) {
+            res.status(400).send({message: 'user does not exist'});
+        
+        } else {
+            const storedPassword = user.password;
+            const isPasswordsMatch = await bcrypt.compare(password, storedPassword);
+
+            
+            if (!isPasswordsMatch) {
+                res.status(400).send({message: 'Wrong email and password combination'});
+            
+            } else {
+                const accessToken = createToken(user);
+                res.status(200).cookie("access-token", accessToken, {
+                     maxAge: 1000 * 60 * 60 * 24 * 1,                        // 1 day, in ms   
+                     httpOnly: true 
+                });
+                res.status(200).send(accessToken);
+    
+            } 
+        }
 
     } catch(error) {
         console.log(error);
@@ -123,3 +155,35 @@ export const getUserProfileController = async (req, res) => {
     }
 
 };
+
+// code for tokens
+const createToken = (user) => {
+    const accessToken = sign(
+        {id: user._id, email: user.email}, 
+        JWT_SECRET);
+
+    return accessToken;
+}
+
+// middleware
+export const validateToken = (req, res, next) => {
+    const accessToken = req.cookies["access-token"];
+
+    if (!accessToken) {
+        return res.status(400).send({message: "user is not authenticated"})
+    }
+    
+    try {
+        const validToken = verify(accessToken, JWT_SECRET);
+        if (validToken) {
+            req.authenticated = true;   // new variable
+            return next();
+
+        }
+
+    } catch(error) {
+        return res.status(400).send({message: error})
+
+    }
+
+}

@@ -5,8 +5,9 @@ import { mongoose } from 'mongoose'
 import { addProductController, deleteProductController, getAllProductsController, getOneProductController, updateProductController } from './controllers/Products.js'
 
 import * as dotenv from 'dotenv'
-import { addUserController, deleteUserController, getAllUsersController, getOneUserController, getUserProfileController, logInUserController, updateUserController } from './controllers/Users.js'
+import { addUserController, deleteUserController, getAllUsersController, getOneUserController, getUserProfileController, logInUserController, updateUserController, validateToken } from './controllers/Users.js'
 
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 const { PORT, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME } = process.env
@@ -19,6 +20,7 @@ app.use(express.json());
 // app.use(express.urlencoded({extended: false})) // test for empty body
 app.use(cors());
 app.use(express.static('client/build'));
+app.use(cookieParser());
 
 mongoose.set('strictQuery', true);
 
@@ -44,8 +46,8 @@ app.put('/api/users/updateUser/:id', updateUserController);
 app.delete('/api/users/deleteUser/:id', deleteUserController);
 
 app.post('/api/users/register', addUserController);       // same as addUser ?
-app.post('/api/user/login', logInUserController);
-app.get('api/users/profile/:id', getUserProfileController);     // same as getOneUser ?
+app.post('/api/users/login', logInUserController);
+app.get('/api/users/profile', validateToken, getUserProfileController);     // same as getOneUser ?
 
 app.get('*', () => (req, res) => {
     res.sendFile(__dirname + '/client/build/index.html');
