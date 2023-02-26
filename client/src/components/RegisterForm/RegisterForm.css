@@ -1,0 +1,17 @@
+form {
+    min-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input {
+    height: 2em;
+    width: 40%;
+    margin-bottom: 1em;
+}
+
+p.error {
+    color: red;
+    margin-bottom: 1em;
+}

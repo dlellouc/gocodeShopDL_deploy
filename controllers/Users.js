@@ -44,9 +44,11 @@ export const getOneUserController = async (req, res) => {
 export const addUserController = async (req, res) => {
     try {
         const { firstName, lastName, email, password } = req.body;
-        const existingUser = getOneUserByEmail(email);
+        console.log(req.body)
+        const existingUser = await getOneUserByEmail(email);
         
         if (existingUser) {
+            console.log(existingUser)
             res.status(400).send({message: "email already in use"});
         
         } else {

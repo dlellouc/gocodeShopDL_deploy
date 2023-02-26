@@ -15,7 +15,7 @@ import './Header.css'
 import UserContext from '../../contexts/UserContext';
 
 export const Header = () => {
-  const { isAdmin } = useContext(UserContext);
+  const { isAuthenticated, isAdmin } = useContext(UserContext);
   const { cartOpen, setCartOpen } = useContext(CartContext);
   const [showCookies, setShowCookies] = useState(true);
   const clock = useClock();
@@ -31,9 +31,8 @@ export const Header = () => {
         <div className='header-links-div'>
           <Link to={"/"}>Home     </Link>
           <Link to={"about"}>About    </Link>
-          {/* <Link to={"about/about2"}>About2    </Link>
-          <Link to={"termsOfAgreement"}>Terms</Link> */}
           {isAdmin && <Link to={"admin/allProducts"}>ProductsTable    </Link>}
+          {!isAuthenticated && <Link to={"register"}>Register    </Link>}
         </div>
 
         <div className='header-cart-button-div'>
