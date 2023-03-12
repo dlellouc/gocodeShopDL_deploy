@@ -7,6 +7,7 @@ import './RegisterForm.css'
 
 import { BASE_URL } from '../../const/config.js'
 
+
 export const RegisterForm = () => {
     const registerFormSchema = yup.object().shape({
         firstName: yup.string().required("Your first name is required"),
@@ -22,10 +23,10 @@ export const RegisterForm = () => {
     const onSubmit = async (data) => {
         const { firstName, lastName, email, password } = data;
         const body = JSON.stringify({ firstName: firstName, lastName: lastName, email: email, password: password});
-        console.log(body);
+        // console.log(body);
 
         try {
-            let response = await fetch(BASE_URL + '/api/users/addUser', {
+            let response = await fetch(BASE_URL + '/api/users/register', {
                 method: 'POST',
                 mode: 'cors',
                 headers: {
@@ -36,6 +37,7 @@ export const RegisterForm = () => {
 
             let responseJSON = await response.json();
             console.log(responseJSON)
+
 
             // redirect to login page
 

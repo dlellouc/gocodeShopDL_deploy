@@ -44,11 +44,11 @@ export const getOneUserController = async (req, res) => {
 export const addUserController = async (req, res) => {
     try {
         const { firstName, lastName, email, password } = req.body;
-        console.log(req.body)
+        // console.log(req.body)
         const existingUser = await getOneUserByEmail(email);
         
         if (existingUser) {
-            console.log(existingUser)
+            // console.log(existingUser)
             res.status(400).send({message: "email already in use"});
         
         } else {
@@ -59,8 +59,8 @@ export const addUserController = async (req, res) => {
         }
 
     } catch(error) {
-        console.log(req.body)
-        console.log(error);
+        // console.log(req.body)
+        // console.log(error);
         res.status(500).send({message:{error}});
     }
 }
@@ -134,8 +134,7 @@ export const logInUserController = async (req, res) => {
                 res.status(200).cookie("access-token", accessToken, {
                      maxAge: 1000 * 60 * 60 * 24 * 1,                        // 1 day, in ms   
                      httpOnly: true 
-                });
-                res.status(200).send(accessToken);
+                }).json('logged in');
     
             } 
         }

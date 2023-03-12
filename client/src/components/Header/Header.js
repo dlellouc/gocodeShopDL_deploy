@@ -33,6 +33,7 @@ export const Header = () => {
           <Link to={"about"}>About    </Link>
           {isAdmin && <Link to={"admin/allProducts"}>ProductsTable    </Link>}
           {!isAuthenticated && <Link to={"register"}>Register    </Link>}
+          {!isAuthenticated && <Link to={"login"}>Login   </Link>}
         </div>
 
         <div className='header-cart-button-div'>

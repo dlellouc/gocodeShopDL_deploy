@@ -1,5 +1,6 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
+import LoginView from '../views/LoginView'
 import RegisterView from '../views/RegisterView'
 
 const RoutesAnonymous = () => {
@@ -7,6 +8,7 @@ const RoutesAnonymous = () => {
     <Routes>    
         <Route path="/" element={<div>login</div>} />
         <Route path="register" element={<RegisterView />} />
+        <Route path="login" element={<LoginView />} />
     </Routes>
   )
 }
